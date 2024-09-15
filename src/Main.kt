@@ -1,7 +1,7 @@
 fun main() {
 
    // Criando a matriz
-    val matrix = arrayOf(
+    val matriz : Array<Array<Char>> = arrayOf(
         arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
         arrayOf(11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
         arrayOf(21, 22, 23, 24, 25, 26, 27, 28, 29, 30),
@@ -15,12 +15,12 @@ fun main() {
     )
 
     // Acessar alguma informação
-    println(matrix[0][5]) // da esquerda 0 = primeira linha e da direita sempre -1 para pegar o 6 por exemplo
+    println(matriz[0][5]) // da esquerda 0 = primeira linha e da direita sempre -1 para pegar o 6 por exemplo
 
     // Percorrendo a matriz
-    for (i in matrix.indices) {
-        for (j in matrix[i].indices) {
-            print("${matrix[i][j]} ")
+    for (i in matriz.indices) {
+        for (j in matriz[i].indices) {
+            print("${matriz[i][j]} ")
         }
         println()
     }
