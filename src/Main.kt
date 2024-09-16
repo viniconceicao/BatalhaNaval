@@ -4,11 +4,16 @@ var barcos = 3;
 
 // o Main vai ser utilizado para fazer a sequência do minigame e dar opção de jogar novamente
 fun main() {
-        setupBoard()
-        setupBoats()
-        printBoard()
-        playGame()
+    do {
+    setupBoard()
+    setupBoats()
+    printBoard()
+    playGame()
     // Fazer opção de jogar novamente
+    println("Jogar novamente? (1 para SIM, outro número para sair)")
+    val jogarNovamente = readLine()?.toIntOrNull() ?: 0
+}   while (jogarNovamente == 1)
+    println("Obrigado por jogar!")
 }
 
 // Inicializar a matriz com '.'
