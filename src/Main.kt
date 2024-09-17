@@ -79,9 +79,11 @@ fun printBoard(mostrarBarcos: Boolean = false, fimDeJogo: Boolean = false) {
                 fimDeJogo && cell == 'C' -> print("${azul}C${reset} ")
                 fimDeJogo && cell == 'R' -> print("${azul}R${reset} ")
                 fimDeJogo && cell == '~' -> print("${verde}~${reset} ")
+                fimDeJogo && cell == 'M' -> print("${verde}M${reset} ")
                 !mostrarBarcos && cell in listOf('P', 'C', 'R') -> print(". ")
                 cell == 'X' -> print("${vermelho}X${reset} ")
                 cell == '~' -> print("${verde}~${reset} ")
+                cell == 'M' -> print("${verde}M${reset} ")
                 else -> print("$cell ")
             }
         }
