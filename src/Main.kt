@@ -1,6 +1,21 @@
-// Criando a matriz
+// Criando a matriz com tamanho 10x10
 val matriz2D = Array(10) { CharArray(10) { '.' } }
-var barcos = 3;
+
+
+// Valores para a matriz
+val porta_avioes = 10
+val cruzadores = 1
+val rebocadores = 2
+val tentativas = 15
+val barcos = 0
+var pontuacao = 0
+
+// Cores
+val reset = "\u001B[0m"
+val vermelho = "\u001B[31m"
+val verde = "\u001B[32m"
+val azul = "\u001B[34m"
+
 
 // o Main vai ser utilizado para fazer a sequência do minigame e dar opção de jogar novamente
 fun main() {
@@ -64,7 +79,7 @@ fun playGame() {
     var hits = 0
     var attempts = 0
 
-    while (hits < barcos) {
+    while (hits < barcos && attempts < tentativas) {
         print("Digite a coordenada (ex: A1): ")
         val input = readLine()?.uppercase() ?: ""
 
@@ -72,34 +87,48 @@ fun playGame() {
             val row = input[0].code - 65  // Converte 'A'-'J' em 0-9
             val col = input.substring(1).toIntOrNull()?.minus(1) ?: -1  // Converte '1'-'10' em 0-9
 
-            if (row in 0.. 10 && col in 0 .. 10) {
-                attempts++
+            if (row in 0 until 10 && col in 0 until 10) {
                 when (matriz2D[row][col]) {
                     '#' -> {
-                        println("Acertou!")
+                        println("${vermelho}Acertou um Porta-Aviões!${reset}")
                         matriz2D[row][col] = 'X'
+                        pontuacao += porta_avioes
+                        hits++
+                    }
+                    'C' -> {
+                        println("${vermelho}Acertou um Cruzador!${reset}")
+                        matriz2D[row][col] = 'X'
+                        pontuacao += cruzadores
+                        hits++
+                    }
+                    'R' -> {
+                        println("${vermelho}Acertou um Rebocador!${reset}")
+                        matriz2D[row][col] = 'X'
+                        pontuacao += rebocadores
                         hits++
                     }
                     '.' -> {
-                        println("Água!")
-                        matriz2D[row][col] = '~'
+                        println("${verde}Água!${verde}")
+                        matriz2D[row][col] = '~' // Marca a água
                     }
                     else -> println("Você já atacou aqui!")
                 }
+                attempts++
             } else {
                 println("Coordenada inválida!")
             }
-
-            printBoard()
         } else {
             println("Entrada inválida!")
         }
     }
 
-    println("Parabéns! Você afundou todos os navios em $attempts tentativas.")
-    printBoard(mostrarBarcos = true)  // Mostra os navios no final do jogo
+    // Fim de jogo
+    println("Fim das tentativas!")
+    printBoard(mostrarBarcos = true)  // Mostra os navios no final
+    println("Sua pontuação final: $pontuacao pontos.")
 }
 
 
 
 // Não sei porque raios o until funciona e não o ".." mas tá ai
+// Bugando o jogo tenho que corrigir
