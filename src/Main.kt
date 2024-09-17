@@ -1,3 +1,8 @@
+// Nome dos Alunos:
+// Marcos Vinicius Arruda Vandresen
+// Rodrigo Vaisam Bastos
+// Vinícius de Liz da Conceição
+
 import kotlin.math.abs
 
 // Criando a matriz com tamanho 10x10
@@ -8,10 +13,10 @@ val portaAvioes = 10
 val cruzador = 1
 val rebocadores = 2
 val tentativas = 15
-var barcos = portaAvioes + cruzador + rebocadores // Soma o total de navios
+var barcos = portaAvioes + cruzador + rebocadores
 var pontuacao = 0
 
-// Cores
+// Cores para destacar os acertos e erros
 val reset = "\u001B[0m"
 val vermelho = "\u001B[31m"
 val verde = "\u001B[32m"
@@ -24,7 +29,6 @@ fun main() {
         setupBoats()
         printBoard()
         playGame()
-        // Fazer opção de jogar novamente
         println("Jogar novamente? (1 para SIM, outro número para sair)")
         val jogarNovamente = readLine()?.toIntOrNull() ?: 0
     } while (jogarNovamente == 1)
@@ -35,14 +39,13 @@ fun main() {
 fun setupBoard() {
     for (i in 0 until 10) {
         for (j in 0 until 10) {
-            matriz2D[i][j] = '.' // Mostrar '.' no tabuleiro
+            matriz2D[i][j] = '.'
         }
     }
 }
 
-// Posiciona os barcos: porta-aviões, cruzador, rebocadores
+// Posiciona os barcos
 fun setupBoats() {
-    // Função para evitar sobreposição e garantir que cada tipo de barco seja colocado adequadamente
     fun posicionarBarco(tipo: Char, quantidade: Int) {
         var barcoCount = 0
         while (barcoCount < quantidade) {
@@ -57,37 +60,35 @@ fun setupBoats() {
     }
 
     // Posicionando os barcos
-    posicionarBarco('P', portaAvioes) // Porta-aviões
-    posicionarBarco('C', cruzador)    // Cruzador
-    posicionarBarco('R', rebocadores) // Rebocadores
+    posicionarBarco('P', portaAvioes)
+    posicionarBarco('C', cruzador)
+    posicionarBarco('R', rebocadores)
 }
 
-// Imprime o estado atual da matriz, destacando no final do jogo
 fun printBoard(mostrarBarcos: Boolean = false, fimDeJogo: Boolean = false) {
     print("  ")
-    (1..10).forEach { print("$it ") } // Exibir os números no topo
+    (1..10).forEach { print("$it ") }
     println()
 
     matriz2D.forEachIndexed { i, linha ->
-        print("${(i + 65).toChar()} ") // Exibir as letras à esquerda
+        print("${(i + 65).toChar()} ")
         linha.forEach { cell ->
             when {
-                fimDeJogo && cell == 'X' -> print("${vermelho}X${reset} ") // Navios afundados em vermelho no final do jogo
-                fimDeJogo && cell == 'P' -> print("${azul}P${reset} ")     // Porta-aviões restantes em azul
-                fimDeJogo && cell == 'C' -> print("${azul}C${reset} ")     // Cruzador restante em azul
-                fimDeJogo && cell == 'R' -> print("${azul}R${reset} ")     // Rebocador restante em azul
-                fimDeJogo && cell == '~' -> print("${verde}~${reset} ")    // Água em verde no final
-                !mostrarBarcos && cell == 'P' -> print(". ")               // Ocultar Porta-aviões durante o jogo
-                !mostrarBarcos && cell == 'C' -> print(". ")               // Ocultar Cruzador durante o jogo
-                !mostrarBarcos && cell == 'R' -> print(". ")               // Ocultar Rebocador durante o jogo
-                else -> print("$cell ")                                    // Exibir qualquer outra coisa (X, ~, etc.)
+                fimDeJogo && cell == 'X' -> print("${vermelho}X${reset} ")
+                fimDeJogo && cell == 'P' -> print("${azul}P${reset} ")
+                fimDeJogo && cell == 'C' -> print("${azul}C${reset} ")
+                fimDeJogo && cell == 'R' -> print("${azul}R${reset} ")
+                fimDeJogo && cell == '~' -> print("${verde}~${reset} ")
+                !mostrarBarcos && cell in listOf('P', 'C', 'R') -> print(". ")
+                cell == 'X' -> print("${vermelho}X${reset} ")
+                cell == '~' -> print("${verde}~${reset} ")
+                else -> print("$cell ")
             }
         }
         println()
     }
 }
 
-// Verifica a distância de acerto, se o tiro foi próximo a algum navio
 fun verificarDistancia(row: Int, col: Int): Int {
     var menorDistancia: Int? = null
 
@@ -105,24 +106,22 @@ fun verificarDistancia(row: Int, col: Int): Int {
         }
     }
 
-    // Se menorDistancia não foi definida, retorne -1 para indicar que não há navios próximos
     return menorDistancia ?: -1
 }
-
 
 fun playGame() {
     var hits = 0
     var attempts = 0
-    val jogadas = mutableSetOf<String>() // Guarda as tentativas para evitar repetições
+    val jogadas = mutableSetOf<String>()
 
     while (hits < barcos && attempts < tentativas) {
         print("Digite a coordenada (ex: A1): ")
         val input = readLine()?.uppercase() ?: ""
 
         if (input.isNotEmpty() && !jogadas.contains(input)) {
-            jogadas.add(input) // Armazena o tiro
-            val row = input[0].code - 65  // Converte 'A'-'J' em 0-9
-            val col = input.substring(1).toIntOrNull()?.minus(1) ?: -1  // Converte '1'-'10' em 0-9
+            jogadas.add(input)
+            val row = input[0].code - 65
+            val col = input.substring(1).toIntOrNull()?.minus(1) ?: -1
 
             if (row in 0 until 10 && col in 0 until 10) {
                 when (matriz2D[row][col]) {
@@ -148,10 +147,10 @@ fun playGame() {
                         val distancia = verificarDistancia(row, col)
                         if (distancia > 0) {
                             println("${verde}Água! Você errou por $distancia casas.${reset}")
-                            matriz2D[row][col] = '~' // Marca água quando o erro é próximo
+                            matriz2D[row][col] = '~'
                         } else {
                             println("${verde}Errou por muito!${reset}")
-                            matriz2D[row][col] = 'M' // Marca M quando o erro é distante
+                            matriz2D[row][col] = 'M'
                         }
                     }
                     else -> println("Você já atacou aqui!")
@@ -166,9 +165,7 @@ fun playGame() {
         printBoard()
     }
 
-    // Fim de jogo - Exibe o tabuleiro com os navios e as marcas coloridas
-    println("Fim das tentativas!")
-    printBoard(mostrarBarcos = true, fimDeJogo = true) // Mostra os navios no final com destaque
-    println("Sua pontuação final: $pontuacao pontos.")
+    // Fim de jogo
+    println("Fim de jogo! Sua pontuação final foi: $pontuacao pontos.")
+    printBoard(mostrarBarcos = true, fimDeJogo = true)
 }
-
